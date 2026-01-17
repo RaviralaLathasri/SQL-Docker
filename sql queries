@@ -1,5 +1,75 @@
-###
+Query 1:
 SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'public';
-###
+
+Query 2: This query returns the first 100 taxi trips where pickup and drop-off happen in the same zone, along with that zone’s info.
+SELECT *
+FROM yellow_taxi_data y, zones z
+WHERE 
+y."PULocationID" = z."LocationID" AND
+y."DOLocationID"=  z."LocationID"
+LIMIT 100;
+
+Query 3: Inner Join
+SELECT *
+FROM yellow_taxi_data y INNER JOIN zones z
+ON
+y."PULocationID" = z."LocationID" AND
+y."DOLocationID"=  z."LocationID"
+LIMIT 100;
+
+Query 4: Checking for Location IDs in the zones table not in the yellow taxi table
+SELECT DISTINCT y."PULocationID"
+FROM yellow_taxi_data y
+WHERE y."PULocationID" NOT IN (SELECT "LocationID" FROM zones)
+LIMIT 100;
+
+Query 5: This helps find old zone IDs not used in January 2021.
+SELECT DISTINCT z."LocationID"
+FROM zones z
+WHERE z."LocationID" NOT IN (SELECT "PULocationID" FROM yellow_taxi_data);
+
+Query 6: Keeps all rows from taxi table, even if zone doesn’t exist:(left join)-->Left Join
+SELECT *
+FROM yellow_taxi_data y
+LEFT JOIN zones z
+ON y."PULocationID" = z."LocationID";
+
+Query 7: Keeps all rows from zones-->Right Join
+SELECT *
+FROM yellow_taxi_data y
+RIGHT JOIN zones z
+ON y.PULocationID = z.LocationID;
+
+Query 8: Keeps both-->Full Join
+SELECT *
+FROM yellow_taxi_data y
+FULL OUTER JOIN zones z
+ON y."PULocationID" = z."LocationID"
+LIMIT 100;
+
+Query 9:Group BY
+SELECT DATE(tpep_pickup_datetime) AS day,
+       COUNT(*) AS trips
+FROM yellow_taxi_data
+GROUP BY day;
+
+Query 10: Order BY
+SELECT day, trips
+FROM (
+    SELECT DATE(tpep_pickup_datetime) AS day,
+           COUNT(*) AS trips
+    FROM yellow_taxi_data
+    GROUP BY day
+) t
+ORDER BY trips DESC;
+
+Query 11: Aggregations
+SELECT
+    COUNT(*) AS total_trips,
+    MIN(tpep_pickup_datetime),
+    MAX(tpep_pickup_datetime)
+FROM yellow_taxi_data;
+
+
