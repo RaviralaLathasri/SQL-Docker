@@ -12,11 +12,6 @@ This project shows how to use Docker to run Jupyter Notebook, PostgreSQL, and pg
 ny_taxi_project/
 │
 ├── docker-compose.yml
-├── data/
-│   ├── taxi_zone_lookup.csv
-│   └── yellow_tripdata_2021-01.csv.gz
-└── notebooks/
-    └── load_data.ipynb
 ```
 
 ---
