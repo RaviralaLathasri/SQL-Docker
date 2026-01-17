@@ -93,12 +93,15 @@ Create a new notebook and run the following code:
 import pandas as pd
 from sqlalchemy import create_engine
 
-engine = create_engine(
-    "postgresql://postgres:postgres@postgres:5432/ny_taxi"
-)
+engine = create_engine("postgresql://postgres:postgres@postgres:5432/ny_taxi")
 
 df = pd.read_csv("data/yellow_tripdata_2021-01.csv.gz")
-df.to_sql("yellow_taxi_data", engine, if_exists="replace", index=False)
+df.to_sql("zones",engine,if_exists="replace",index=False)
+print("Zones table loaded")
+
+df2 = pd.read_csv("yellow_tripdata_2021-01 (1).csv.gz", low_memory=False)
+df2.to_sql( "yellow_taxi_data",engine, if_exists="replace",index=False)
+print("table loaded")
 ```
 
 ---
